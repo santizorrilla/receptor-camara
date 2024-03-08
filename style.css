@@ -1,0 +1,53 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0; /* Color de fondo predeterminado */
+  }
+  
+  #meetingContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  #videoContainer {
+    position: relative;
+    width: 70%;
+    max-width: 800px;
+  }
+  
+  #videoWrapper {
+    position: relative;
+    width: 100%;
+  }
+  
+  #video {
+    width: 100%;
+    border-radius: 10px;
+  }
+  
+  #zoomControls {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+  }
+  
+  #zoomControls button {
+    margin-left: 5px;
+    padding: 10px 15px;
+    font-size: 20px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  #zoomControls button:hover {
+    background-color: #45a049;
+  }
