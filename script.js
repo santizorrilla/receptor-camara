@@ -59,11 +59,22 @@ function applyZoom() {
 
 // Función para capturar los valores de color de la cámara y cambiar el color de fondo de la página
 async function capturarColor() {
-  // Asignar las dimensiones del canvas al tamaño del video
-  canvas.width = videoElement.videoWidth;
-  canvas.height = videoElement.videoHeight;
-  // Dibujar el fotograma actual del video en el canvas
-  ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+  // Verificar si el video tiene dimensiones válidas
+  if (videoElement.videoWidth > 0 && videoElement.videoHeight > 0) {
+    // Asignar las dimensiones del canvas al tamaño del video
+    canvas.width = videoElement.videoWidth;
+    canvas.height = videoElement.videoHeight;
+    // Dibujar el fotograma actual del video en el canvas
+    ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+    // Obtener los datos de los píxeles en forma de objeto ImageData
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    // Resto del código para procesar los datos de píxeles y cambiar el color de fondo...
+  } else {
+    // Si las dimensiones del video aún no están disponibles, esperar un momento y volver a intentarlo
+    setTimeout(capturarColor, 100);
+  }
+}
 
   // Obtener los datos de los píxeles en forma de objeto ImageData
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
