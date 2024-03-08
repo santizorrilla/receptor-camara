@@ -29,6 +29,9 @@ async function startCamera() {
     videoElement.srcObject = stream;
     // Esperar a que la cámara se cargue completamente
     await new Promise(resolve => videoElement.onloadedmetadata = resolve);
+    // Una vez que el video se ha cargado, establecer las dimensiones del canvas
+    canvas.width = videoElement.videoWidth;
+    canvas.height = videoElement.videoHeight;
   } catch (err) {
     handleError(err);
   }
@@ -90,41 +93,26 @@ async function capturarColor() {
   body.style.backgroundColor = `rgb(${rojoPromedio}, ${verdePromedio}, ${azulPromedio})`;
 
   // Verificar si el color es predominantemente azul en comparación con los otros componentes de color
-// Verificar si el color es predominantemente azul en comparación con los otros componentes de color
-const umbralAzul = 150; // Ajusta este umbral según sea necesario (por ejemplo, 150 representa un porcentaje alto de azul requerido)
-if (azulPromedio > rojoPromedio && azulPromedio > verdePromedio && azulPromedio > umbralAzul) {
-  // Reproducir el sonido solo si la música no se ha reproducido ya
-  if (!musicaReproducida) {
-    audio = new Audio('fondoVerde.wav');
-    audio.play();
-    musicaReproducida = true; // Marcar que la música ya se reprodujo
+  const umbralAzul = 150; // Ajusta este umbral según sea necesario (por ejemplo, 150 representa un porcentaje alto de azul requerido)
+  if (azulPromedio > rojoPromedio && azulPromedio > verdePromedio && azulPromedio > umbralAzul) {
+    // Reproducir el sonido solo si la música no se ha reproducido ya
+    if (!musicaReproducida) {
+      audio = new Audio('fondoVerde.wav');
+      audio.play();
+      musicaReproducida = true; // Marcar que la música ya se reprodujo
+    }
+  } else {
+    // Detener la música si el color no es azul
+    if (musicaReproducida) {
+      audio.pause();
+      audio.currentTime = 0; // Reiniciar la reproducción al inicio para la próxima vez
+      musicaReproducida = false; // Restablecer el estado de reproducción de la música
+    }
   }
-} else {
-  // Detener la música si el color no es azul
-  if (musicaReproducida) {
-    audio.pause();
-    audio.currentTime = 0; // Reiniciar la reproducción al inicio para la próxima vez
-    musicaReproducida = false; // Restablecer el estado de reproducción de la música
-  }
-}
 }
 
 // Capturar el color de la cámara cada 500 milisegundos
 setInterval(capturarColor, 500);
 
 // Iniciar la cámara cuando se carga la página
-async function startCamera() {
-  try {
-    // Obtener el stream de la cámara
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-    // Asignar el stream al elemento de video
-    videoElement.srcObject = stream;
-    // Esperar a que la cámara se cargue completamente
-    await new Promise(resolve => videoElement.onloadedmetadata = resolve);
-    // Una vez que el video se ha cargado, establecer las dimensiones del canvas
-    canvas.width = videoElement.videoWidth;
-    canvas.height = videoElement.videoHeight;
-  } catch (err) {
-    handleError(err);
-  }
-}
+startCamera();
