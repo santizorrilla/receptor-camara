@@ -113,4 +113,18 @@ if (azulPromedio > rojoPromedio && azulPromedio > verdePromedio && azulPromedio 
 setInterval(capturarColor, 500);
 
 // Iniciar la cámara cuando se carga la página
-startCamera();
+async function startCamera() {
+  try {
+    // Obtener el stream de la cámara
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    // Asignar el stream al elemento de video
+    videoElement.srcObject = stream;
+    // Esperar a que la cámara se cargue completamente
+    await new Promise(resolve => videoElement.onloadedmetadata = resolve);
+    // Una vez que el video se ha cargado, establecer las dimensiones del canvas
+    canvas.width = videoElement.videoWidth;
+    canvas.height = videoElement.videoHeight;
+  } catch (err) {
+    handleError(err);
+  }
+}
